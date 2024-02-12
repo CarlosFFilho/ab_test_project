@@ -1,0 +1,51 @@
+"""IMPORTANDO BIBLIOTECAS"""
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from scipy.stats import ttest_ind
+
+"""IMPORTANDO BANCO DE DADOS"""
+
+control_group = pd.read_csv('control_group.csv', sep=';')
+test_group = pd.read_csv('test_group.csv', sep=';')
+control_group = control_group.dropna()
+test_group = test_group.dropna()
+
+control_group
+
+test_group
+
+"""FILTRANDO OS CONJUNTOS DE DADOS DE NÚMEROS DE IMPRESSÕES"""
+
+control_impressions = control_group.iloc[:,3].values
+test_impressions = test_group.iloc[:,3].values
+
+control_impressions
+
+test_impressions
+
+"""TESTE T E VALOR P"""
+
+t, p = ttest_ind(control_impressions, test_impressions)
+
+print(f"t = {t:.2f}")
+print(f"p = {p:.2f}")
+
+"""Por meio dos valores t e p, observa-se que a média da amostra A (Dados de controle) é superior que a média da amostra B (Dados de teste), tendo e vista o valor positivo de t. Ademais, o indicador valor-p de 0.00 expressa que há uma significância estatística entre as diferenças observadas nos dois grupos de dados."""
+
+"""VIZUALIZAÇÃO GRÁFICA"""
+
+media_A = np.mean(control_impressions)
+media_B = np.mean(test_impressions)
+
+plt.hist(control_impressions, alpha=0.5, label='Versão A (control impressions)')
+plt.hist(test_impressions, alpha=0.5, label='Versão B (test impressions)')
+plt.axvline(media_A, color='b', linestyle='dashed', linewidth=1)
+plt.axvline(media_B, color='r', linestyle='dashed', linewidth=1)
+plt.xlabel('VALORES')
+plt.ylabel('FREQUÊNCIA')
+plt.legend(loc='upper right')
+plt.show()
+
+"""No gráfico acima, pode-se observar o histograma de frequência dos dois conjuntos de dados estudados, bem como suas médias representadas pelas linhas tracejadas verticais."""
